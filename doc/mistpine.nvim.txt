@@ -1,0 +1,169 @@
+*mistpine.nvim.txt*  The mistpine color scheme for Neovim
+
+==============================================================================
+CONTENTS                                               *mistpine.nvim-contents*
+
+  1. Introduction ............................ |mistpine.nvim-introduction|
+  2. Usage ................................... |mistpine.nvim-usage|
+  3. Options ................................. |mistpine.nvim-options|
+  4. Lua API ................................. |mistpine.nvim-api|
+  5. Plugins ................................. |mistpine.nvim-plugins|
+  6. Colors .................................. |mistpine.nvim-colors|
+
+==============================================================================
+1. INTRODUCTION                                    *mistpine.nvim-introduction*
+
+mistpine is a dark color scheme of cool, misty grays over a deep blue-green
+night, with muted, earthy accents. mistpine.nvim implements the mistpine spec
+(https://github.com/lnutimura/mistpine): every color is a palette color or one
+of the spec's blends, and every syntax and diagnostic color clears 4.5:1 on
+the editor background.
+
+Requires Neovim 0.10 or newer.
+
+==============================================================================
+2. USAGE                                                  *mistpine.nvim-usage*
+
+                                                         *:colorscheme-mistpine*
+>vim
+    colorscheme mistpine
+<
+Calling |mistpine.setup()| first is optional. With lazy.nvim: >lua
+
+    {
+      "lnutimura/mistpine.nvim",
+      lazy = false,
+      priority = 1000,
+      opts = {},
+      config = function(_, opts)
+        require("mistpine").setup(opts)
+        vim.cmd.colorscheme("mistpine")
+      end,
+    }
+<
+mistpine is dark only. Loading it sets 'background' to "dark". Setting
+'background' to "light" afterwards turns the colorscheme off, as Vim does for
+any dark-only scheme.
+
+==============================================================================
+3. OPTIONS                                              *mistpine.nvim-options*
+
+Defaults: >lua
+
+    require("mistpine").setup({
+      transparent = false,
+      dim_inactive = false,
+      terminal_colors = true,
+      italic = true,
+      bold = true,
+      plugins = { all = true },
+      on_colors = function(palette) end,
+      on_highlights = function(highlights, colors) end,
+    })
+<
+                                                *mistpine.nvim-transparent*
+transparent ~
+    Leave the editor background unset (|hl-Normal|, |hl-SignColumn|, the
+    selected tab, …) so the terminal's shows through. Floats keep theirs.
+
+                                                *mistpine.nvim-dim_inactive*
+dim_inactive ~
+    Give inactive windows (|hl-NormalNC|) the recessed panel background.
+
+                                                *mistpine.nvim-terminal_colors*
+terminal_colors ~
+    Set `g:terminal_color_0` … `g:terminal_color_15` for |:terminal|.
+
+                                                *mistpine.nvim-italic*
+                                                *mistpine.nvim-bold*
+italic, bold ~
+    Use italics (comments, strings) and bold (functions, headings). Turn
+    them off for fonts without those styles.
+
+                                                *mistpine.nvim-plugins-option*
+plugins ~
+    Which plugin integrations to load. `all` sets the default for every
+    one, then single plugins override it: >lua
+        plugins = { all = true, telescope = false }
+        plugins = { all = false, gitsigns = true }
+<   Keys are listed in |mistpine.nvim-plugins|.
+
+                                                *mistpine.nvim-on_colors*
+on_colors(palette) ~
+    Change palette colors (`bg0` … `fg3`, `red` … `pink`, `brightRed` …
+    `brightCyan`) before anything is derived from them. Colors that come
+    from a palette key follow it, and blends are recomputed: >lua
+        on_colors = function(p)
+          p.bg1 = "#000000" -- editor background, search and diff blends
+        end
+<
+                                                *mistpine.nvim-on_highlights*
+on_highlights(highlights, colors) ~
+    Change highlight groups before they are set. Values are
+    |nvim_set_hl()| tables, or the name of a group to link to: >lua
+        on_highlights = function(hl, c)
+          hl.Comment.fg = c.fg2
+          hl.CursorLine = { bg = c.bg3 }
+          hl.WinSeparator = "FloatBorder"
+        end
+<
+==============================================================================
+4. LUA API                                                  *mistpine.nvim-api*
+
+                                                            *mistpine.setup()*
+require("mistpine").setup({opts})
+    Store options for the next `:colorscheme mistpine`.
+
+                                                             *mistpine.load()*
+require("mistpine").load({opts})
+    Apply the colorscheme, with {opts} merged over the ones from
+    |mistpine.setup()| for this load only.
+
+                                                           *mistpine.colors()*
+require("mistpine").colors({opts})
+    The resolved colors, for statuslines and configs that want to match:
+    palette keys (`bg1`, `green`, …), roles such as `bg`, `fg`, `border`,
+    `accent`, `error`, the spec's tables (`syntax`, `ui`, `terminal`) and
+    `ansi` (16 terminal colors, `ansi[1]` is color 0).
+
+==============================================================================
+5. PLUGINS                                              *mistpine.nvim-plugins*
+
+Key               Plugin ~
+`blink`             saghen/blink.cmp
+`bufferline`        akinsho/bufferline.nvim
+`flash`             folke/flash.nvim
+`gitsigns`          lewis6991/gitsigns.nvim
+`grug_far`          MagicDuck/grug-far.nvim
+`incline`           b0o/incline.nvim
+`lazy`              folke/lazy.nvim
+`mason`             mason-org/mason.nvim
+`mini`              nvim-mini/mini.icons
+`noice`             folke/noice.nvim
+`render_markdown`   MeanderingProgrammer/render-markdown.nvim
+`snacks`            folke/snacks.nvim
+`telescope`         nvim-telescope/telescope.nvim
+`trouble`           folke/trouble.nvim
+`which_key`         folke/which-key.nvim
+`zen_mode`          folke/zen-mode.nvim
+
+                                                        *mistpine.nvim-lualine*
+lualine.nvim reads `lua/lualine/themes/mistpine.lua` when the theme is
+"auto" (LazyVim's default) or "mistpine".
+
+Plugins that take their colors from standard groups (todo-comments.nvim,
+dressing.nvim, inc-rename.nvim, …) follow mistpine without an integration.
+
+==============================================================================
+6. COLORS                                                *mistpine.nvim-colors*
+
+Neutrals run from dark to light: `bg0`–`bg4` are surfaces, `fg0`–`fg3` text
+tones. `bg1` is the editor; raised surfaces (cursor line, status line, menus)
+use `bg2`, selections `bg3`; recessed ones (floats, panels, inactive tabs)
+use `bg0`. `fg0` is for decoration only (indent scope, dimmed code), `fg1`
+is comments and muted text, `fg3` the text color.
+
+The full spec, with contrast ratios, is at
+https://github.com/lnutimura/mistpine/blob/main/docs/spec.md
+
+ vim:tw=78:ts=8:noet:ft=help:norl:

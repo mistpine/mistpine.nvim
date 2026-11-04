@@ -60,7 +60,7 @@ require("mistpine").setup({
 Colors derived from a palette color follow it: changing `bg1` in `on_colors`
 moves the editor background and recomputes the search and diff blends.
 `require("mistpine").colors()` returns the resolved colors for your own
-statusline or plugins. mistpine is dark only: `:set background=light` turns it
+statusline or plugins (see `:help mistpine.nvim`). mistpine is dark only: `:set background=light` turns it
 off, as Vim does for dark-only schemes.
 
 ## Screenshots
@@ -74,10 +74,10 @@ off, as Vim does for dark-only schemes.
 ## Development
 
 ```sh
-nvim --clean --headless -l tests/run.lua          # unit tests
-nvim --clean --headless -l tests/plugins/run.lua  # real plugins (clones into .cache/plugins)
-nvim -l scripts/sync.lua                          # palette.lua from the mistpine spec
-pnpm install && pnpm banner && pnpm render        # README images (Node 24+, Chromium)
+make test          # unit tests, or: nvim --clean --headless -l tests/run.lua
+make test-plugins  # real plugins (clones into .cache/plugins)
+make sync          # palette.lua from the mistpine spec
+make images        # README images (pnpm install first; Node 24+, Chromium)
 ```
 
 `lua/mistpine/palette.lua` is generated from

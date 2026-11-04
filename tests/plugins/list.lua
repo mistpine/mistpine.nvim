@@ -14,6 +14,7 @@ return {
       require("mason.ui.colors")
     end,
   },
+  { "saghen/blink.lib" }, -- blink.cmp v2 dependency
   {
     "saghen/blink.cmp",
     function()
