@@ -1,0 +1,7 @@
+* text=auto eol=lf
+*.png binary
+*.ttf binary
+
+# Generated: review the source instead.
+lua/mistpine/palette.lua linguist-generated
+assets/** linguist-generated
