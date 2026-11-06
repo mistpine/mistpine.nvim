@@ -15,7 +15,7 @@ CONTENTS                                               *mistpine.nvim-contents*
 
 mistpine is a dark color scheme of cool, misty grays over a deep blue-green
 night, with muted, earthy accents. mistpine.nvim implements the mistpine spec
-(https://github.com/lnutimura/mistpine): every color is a palette color or one
+(https://github.com/mistpine/mistpine): every color is a palette color or one
 of the spec's blends, and every syntax and diagnostic color clears 4.5:1 on
 the editor background.
 
@@ -31,7 +31,7 @@ Requires Neovim 0.10 or newer.
 Calling |mistpine.setup()| first is optional. With lazy.nvim: >lua
 
     {
-      "lnutimura/mistpine.nvim",
+      "mistpine/mistpine.nvim",
       lazy = false,
       priority = 1000,
       opts = {},
@@ -164,6 +164,6 @@ use `bg0`. `fg0` is for decoration only (indent scope, dimmed code), `fg1`
 is comments and muted text, `fg3` the text color.
 
 The full spec, with contrast ratios, is at
-https://github.com/lnutimura/mistpine/blob/main/docs/spec.md
+https://github.com/mistpine/mistpine/blob/main/docs/spec.md
 
  vim:tw=78:ts=8:noet:ft=help:norl:

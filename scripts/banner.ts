@@ -28,7 +28,7 @@ const MARK = 180;
 const GAP = 36;
 const WORD: TextStyle = { family: "outfit", size: 104, weight: 300, tracking: -0.03 };
 const SUFFIX: TextStyle = { family: "mono", size: 80, weight: 300, tracking: -0.02 };
-/** The suffix color for mistpine.nvim (docs/brand.md in lnutimura/mistpine). */
+/** The suffix color for mistpine.nvim (docs/brand.md in mistpine/mistpine). */
 const ACCENT = c("brightGreen");
 
 /** The mark (120 × 120 units): three pines with fog between them. */

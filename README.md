@@ -6,9 +6,9 @@
   <img src="assets/preview.png" alt="Python in LazyVim with mistpine: bufferline tabs, git signs, diagnostics and lualine" width="100%">
 </p>
 
-**mistpine.nvim** is the Neovim port of [mistpine](https://github.com/lnutimura/mistpine):
+**mistpine.nvim** is the Neovim port of [mistpine](https://github.com/mistpine/mistpine):
 cool, misty grays over a deep blue-green night, with muted, earthy accents.
-It implements the [mistpine spec](https://github.com/lnutimura/mistpine/blob/main/docs/spec.md)
+It implements the [mistpine spec](https://github.com/mistpine/mistpine/blob/main/docs/spec.md)
 exactly. Every color is a palette color or one of the spec's blends, and every
 syntax and diagnostic color clears 4.5:1 on the background.
 
@@ -26,7 +26,7 @@ With [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ```lua
 {
-  "lnutimura/mistpine.nvim",
+  "mistpine/mistpine.nvim",
   lazy = false,
   priority = 1000,
   opts = {},
@@ -81,7 +81,7 @@ make images        # README images (pnpm install first; Node 24+, Chromium)
 ```
 
 `lua/mistpine/palette.lua` is generated from
-[`palette/mistpine.json`](https://github.com/lnutimura/mistpine/blob/main/palette/mistpine.json);
+[`palette/mistpine.json`](https://github.com/mistpine/mistpine/blob/main/palette/mistpine.json);
 change colors upstream, then sync. Screenshots come from a real Neovim: `pnpm render` runs
 an isolated LazyVim under `nvim --embed` and draws its screen in Chromium.
 
