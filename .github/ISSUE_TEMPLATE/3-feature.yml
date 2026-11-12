@@ -1,0 +1,32 @@
+# Filing through the API or `gh issue create`? Forms only apply on the web:
+# write the body with each field's label below as a `### ` heading, in order.
+name: Feature or option
+description: A new option, API or Neovim feature to support.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        mistpine is dark only, and its colors come from the spec, so new
+        variants or palettes are out of scope here. `on_colors` and
+        `on_highlights` cover most one-off changes.
+  - type: textarea
+    id: what
+    attributes:
+      label: What you'd like
+      description: The option or behavior, and how you'd use it.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: What you can't do today, and what you tried (including `on_colors` and `on_highlights`).
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Example
+      description: How the config would look.
+      render: lua
