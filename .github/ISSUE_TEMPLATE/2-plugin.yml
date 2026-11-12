@@ -36,14 +36,3 @@ body:
     attributes:
       label: Notes
       description: Which spec roles fit (diagnostics, diff, search, menus) and anything unusual, such as hard-coded colors.
-  - type: dropdown
-    id: author
-    attributes:
-      label: Who wrote this issue?
-      description: Issues from agents are welcome; say so, so they can be read with that in mind.
-      options:
-        - A person
-        - An AI agent, reviewed by a person
-        - An AI agent, without human review
-    validations:
-      required: true
