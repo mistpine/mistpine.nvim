@@ -1,0 +1,63 @@
+# Filing through the API or `gh issue create`? Forms only apply on the web:
+# write the body with each field's label below as a `### ` heading, in order.
+name: Wrong or broken colors
+description: A highlight group in the wrong color, unreadable, uncolored, or an error from the colorscheme.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        mistpine.nvim follows the [mistpine spec](https://github.com/mistpine/mistpine/blob/main/docs/spec.md).
+        A color that differs from the spec is a bug here; a spec color you'd like
+        changed belongs in [mistpine](https://github.com/mistpine/mistpine/issues/new/choose).
+  - type: textarea
+    id: what
+    attributes:
+      label: What's wrong
+      description: What you see, and what you expected (a spec token if you know it).
+    validations:
+      required: true
+  - type: input
+    id: groups
+    attributes:
+      label: Highlight groups
+      description: Put the cursor on it and run `:Inspect`.
+      placeholder: "@string.documentation.python, TelescopeSelection, BlinkCmpMenu"
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: Drag an image here.
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal config
+      description: A config that shows the problem with `nvim --clean -u repro.lua`, including your mistpine `setup()` options.
+      render: lua
+  - type: textarea
+    id: versions
+    attributes:
+      label: Versions
+      description: "`nvim --version` (first three lines), the mistpine.nvim commit (`:Lazy` shows it), the terminal or GUI, and the OS."
+      render: text
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I'm on the latest mistpine.nvim commit.
+          required: true
+        - label: It still happens without my `on_colors` and `on_highlights` overrides.
+  - type: dropdown
+    id: author
+    attributes:
+      label: Who wrote this issue?
+      description: Issues from agents are welcome; say so, so they can be read with that in mind.
+      options:
+        - A person
+        - An AI agent, reviewed by a person
+        - An AI agent, without human review
+    validations:
+      required: true

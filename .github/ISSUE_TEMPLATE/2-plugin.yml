@@ -1,0 +1,49 @@
+# Filing through the API or `gh issue create`? Forms only apply on the web:
+# write the body with each field's label below as a `### ` heading, in order.
+name: Support a plugin
+description: Add highlight groups for a plugin mistpine.nvim doesn't style yet.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Supported today: blink.cmp, bufferline.nvim, flash.nvim, gitsigns.nvim,
+        grug-far.nvim, incline.nvim, lazy.nvim, mason.nvim, mini.icons, noice.nvim,
+        render-markdown.nvim, snacks.nvim, telescope.nvim, trouble.nvim,
+        which-key.nvim and zen-mode.nvim. For a supported plugin with a wrong or
+        missing group, use **Wrong or broken colors**.
+  - type: input
+    id: plugin
+    attributes:
+      label: Plugin
+      description: Its repository URL.
+      placeholder: "https://github.com/folke/todo-comments.nvim"
+    validations:
+      required: true
+  - type: textarea
+    id: groups
+    attributes:
+      label: Highlight groups
+      description: The groups the plugin defines (its docs, or `:filter /^Prefix/ highlight`), and which ones look off today.
+      render: text
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: How it looks with mistpine today. Drag an image here.
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Which spec roles fit (diagnostics, diff, search, menus) and anything unusual, such as hard-coded colors.
+  - type: dropdown
+    id: author
+    attributes:
+      label: Who wrote this issue?
+      description: Issues from agents are welcome; say so, so they can be read with that in mind.
+      options:
+        - A person
+        - An AI agent, reviewed by a person
+        - An AI agent, without human review
+    validations:
+      required: true
