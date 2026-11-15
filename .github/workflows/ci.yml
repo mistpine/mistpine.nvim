@@ -61,10 +61,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           version: 2.5.2
           args: --check .
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 24
-      - run: corepack enable
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
-      - run: pnpm typecheck
+
+  # The banner and render scripts: pnpm lint and typecheck.
+  scripts:
+    uses: mistpine/port-kit/.github/workflows/port.yml@v0.1.0
+    with:
+      check: false
