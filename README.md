@@ -84,8 +84,9 @@ make images        # README images (pnpm install first; Node 24+, Chromium)
 [`palette/mistpine.json`](https://github.com/mistpine/mistpine/blob/main/palette/mistpine.json);
 change colors upstream, then sync. Screenshots come from a real Neovim: `pnpm render` runs
 an isolated LazyVim under `nvim --embed` and draws its screen in Chromium.
+The banner comes from
+[@mistpine/port-kit](https://github.com/mistpine/port-kit), shared by every mistpine port.
 
 ## License
 
-[MIT](LICENSE). Outfit and JetBrains Mono (in `scripts/fonts`, for the banner) are under the
-SIL Open Font License 1.1.
+[MIT](LICENSE).
