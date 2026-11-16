@@ -1,6 +1,13 @@
 /**
  * Draws a Neovim screen as HTML: every run of cells is placed on the exact
  * cell grid, so glyphs from fallback fonts (Nerd Font icons) cannot drift.
+ *
+ * Backgrounds go in a layer below all text, as in a terminal. Nerd Font
+ * icons are wider than a cell (1em against JetBrains Mono's 0.6em) and
+ * spill into the next one, which is usually a space; drawn in one layer,
+ * that cell's background would cover the icon's right half. Each icon is
+ * centered on its own cell and overflows evenly into the cells on either
+ * side; `text-align: center` would start-align it once it overflows.
  */
 import { readFileSync } from "node:fs";
 import type { Attr, Screen } from "./ui.ts";
@@ -27,13 +34,14 @@ const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 /** Text the primary font draws at exactly one cell: ASCII, Latin and box drawing. */
 const simple = (t: string) => /^[ -ɏ─-▟]$/.test(t);
 
-function style(attr: Attr, screen: Screen, cursor = false): string {
+/** CSS for a run of cells: `text` for the glyphs, `bg` for its background layer, if any. */
+function style(attr: Attr, screen: Screen, cursor = false): { text: string; bg?: string } {
   const d = screen.defaults;
   let fg = attr.foreground ?? d.fg;
   let bg = attr.background ?? d.bg;
   if (Boolean(attr.reverse) !== cursor) [fg, bg] = [bg, fg];
   const css = [`color:${hex(fg)}`];
-  if (bg !== d.bg || attr.reverse || cursor) css.push(`background:${hex(bg)}`);
+  const background = bg !== d.bg || attr.reverse || cursor ? `background:${hex(bg)}` : undefined;
   if (attr.bold) css.push("font-weight:700");
   if (attr.italic) css.push("font-style:italic");
   const lines: string[] = [];
@@ -51,11 +59,15 @@ function style(attr: Attr, screen: Screen, cursor = false): string {
       "text-underline-offset:3px",
     );
   }
-  return css.join(";");
+  return { text: css.join(";"), bg: background };
 }
 
 function span(row: number, col: number, width: number, text: string, css: string, cls = "") {
   return `<span class="c${cls}" style="top:${row * LH}px;left:${col * CW}px;width:${width * CW}px;${css}">${esc(text)}</span>`;
+}
+
+function box(row: number, col: number, width: number, css: string) {
+  return `<div class="b" style="top:${row * LH}px;left:${col * CW}px;width:${width * CW}px;${css}"></div>`;
 }
 
 export function screenHtml(
@@ -64,7 +76,13 @@ export function screenHtml(
   frame: Frame,
   showCursor: boolean,
 ): string {
+  const backgrounds: string[] = [];
   const parts: string[] = [];
+  const run = (row: number, col: number, width: number, text: string, attr: Attr, cls = "") => {
+    const css = style(attr, screen);
+    if (css.bg) backgrounds.push(box(row, col, width, css.bg));
+    if (text !== "") parts.push(span(row, col, width, text, css.text, cls));
+  };
   screen.cells.forEach((cells, r) => {
     let c = 0;
     while (c < cells.length) {
@@ -74,7 +92,7 @@ export function screenHtml(
       if (!simple(cell.text)) {
         const wide = cells[c + 1]?.text === "";
         const width = wide ? 2 : 1;
-        if (cell.text !== "") parts.push(span(r, c, width, cell.text, style(attr, screen), " g"));
+        run(r, c, width, cell.text, attr, " g");
         c += width;
         continue;
       }
@@ -86,7 +104,7 @@ export function screenHtml(
         text += next.text;
         end++;
       }
-      parts.push(span(r, c, end - c, text, style(attr, screen)));
+      run(r, c, end - c, text, attr);
       c = end;
     }
   });
@@ -108,11 +126,21 @@ export function screenHtml(
           : `top:${(row + 1) * LH - LH * pct}px;left:${col * CW}px;width:${CW}px;height:${LH * pct}px`;
       parts.push(`<div class="cursor" style="${box};background:${color}"></div>`);
     } else if (cell) {
+      // Drawn last, background included, so it covers whatever spills into its cell.
       const css =
         own?.background !== undefined
           ? style({ ...colors, reverse: true }, screen, false)
           : style(colors, screen, true);
-      parts.push(span(row, col, 1, cell.text || " ", css, simple(cell.text) ? "" : " g"));
+      parts.push(
+        span(
+          row,
+          col,
+          1,
+          cell.text || " ",
+          [css.text, css.bg].filter(Boolean).join(";"),
+          simple(cell.text) ? "" : " g",
+        ),
+      );
     }
   }
 
@@ -139,12 +167,13 @@ body { padding: 40px; width: max-content; }
 .grid { position: relative; width: ${screen.cols * CW}px; height: ${screen.rows * LH}px;
   font: ${SIZE}px/${LH}px "JetBrains Mono", "Symbols Nerd Font Mono", monospace; font-variant-ligatures: none; }
 .c { position: absolute; height: ${LH}px; white-space: pre; overflow: visible; }
-.g { font-family: "Symbols Nerd Font Mono", "JetBrains Mono", monospace; text-align: center; }
+.g { font-family: "Symbols Nerd Font Mono", "JetBrains Mono", monospace; display: flex; justify-content: center; }
+.b { position: absolute; height: ${LH}px; }
 .cursor { position: absolute; }
 </style></head><body>
 <div class="window">
   <div class="titlebar"><div class="dots">${dots.map((d) => `<i style="background:${d}"></i>`).join("")}</div><div class="title">${esc(frame.title)}</div></div>
-  <div class="grid">${parts.join("")}</div>
+  <div class="grid">${backgrounds.join("")}${parts.join("")}</div>
 </div>
 </body></html>`;
 }
