@@ -22,6 +22,14 @@ syntax and diagnostic color clears 4.5:1 on the background.
 
 ## Install
 
+With `vim.pack` (Neovim 0.12 or newer):
+
+```lua
+vim.pack.add({ "https://github.com/mistpine/mistpine.nvim" })
+require("mistpine").setup({})
+vim.cmd.colorscheme("mistpine")
+```
+
 With [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ```lua
